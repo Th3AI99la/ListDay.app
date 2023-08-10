@@ -1,8 +1,9 @@
 # Fast Notas - Seu App de Anotações Rápidas
 
-  <div style="width: 30%;">
-    <img src="assets/day.gif" style="max-width: 50%;" />
-  </div>
+<div style="max-width: 10%;">
+  <img src="listday/assets/day.gif" style="max-width: 100%;" />
+</div>
+
   
 
 ## Sobre o Aplicativo
