@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listday/repositories/ListDayRepository.dart';
 
 //arquivos de fora
 import 'package:listday/widgets/Item_ListDay.dart';
@@ -14,13 +15,23 @@ class Listdayapp extends StatefulWidget {
 class _ListdayappState extends State<Listdayapp> {
   // ignore: non_constant_identifier_names
   final TextEditingController ControladorListDay = TextEditingController();
+  final ListDayRepository listDayRepository = ListDayRepository();
 
   //Lista com "Todo" Data e Hora, e "Task" que sigfica a lista.
   List<Todo> tasks = [];
   Todo? deletedTodo;
   int? deleteTodoPosition;
 
-  // Recuperar algo apagado
+  @override
+  void initState() {
+    super.initState();
+
+    listDayRepository.getListDay().then((value) {
+      setState(() {
+        tasks = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +141,7 @@ class _ListdayappState extends State<Listdayapp> {
         );
 
         tasks.add(newTodo);
+        listDayRepository.saveListDay(tasks);
       });
       ControladorListDay.clear();
     } else {
@@ -181,6 +193,7 @@ class _ListdayappState extends State<Listdayapp> {
     setState(() {
       tasks.clear();
     });
+    listDayRepository.saveListDay(tasks);
   }
 
   // MARK: BOTÃO DE DELETAR
@@ -192,6 +205,8 @@ class _ListdayappState extends State<Listdayapp> {
     setState(() {
       tasks.remove(task);
     });
+    listDayRepository.saveListDay(tasks);
+
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -204,6 +219,7 @@ class _ListdayappState extends State<Listdayapp> {
             setState(() {
               tasks.insert(deleteTodoPosition!, deletedTodo!);
             });
+            listDayRepository.saveListDay(tasks);
           },
         ),
         duration: const Duration(seconds: 5),
@@ -216,6 +232,7 @@ class _ListdayappState extends State<Listdayapp> {
     setState(() {
       task.title = newTitle;
     });
+    listDayRepository.saveListDay(tasks);
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -225,31 +242,33 @@ class _ListdayappState extends State<Listdayapp> {
   }
 
   void onEdit(Todo task) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController controller = TextEditingController();
-        controller.text = task.title;
+    setState(() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController controller = TextEditingController();
+          controller.text = task.title;
 
-        return AlertDialog(
-          title: Text("Editar Tarefa"),
-          content: TextField(
-            controller: controller,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                onEditTitle(
-                    task,
-                    controller
-                        .text); // Chame a função de edição com o novo título
-              },
-              child: Text("Salvar"),
+          return AlertDialog(
+            title: Text("Editar Tarefa"),
+            content: TextField(
+              controller: controller,
             ),
-          ],
-        );
-      },
-    );
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onEditTitle(
+                      task,
+                      controller
+                          .text); // Chame a função de edição com o novo título
+                },
+                child: Text("Salvar"),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 }
