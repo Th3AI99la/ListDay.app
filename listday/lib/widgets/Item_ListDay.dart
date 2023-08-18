@@ -27,34 +27,6 @@ class ItemListDay extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Slidable(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey[200],
-          ),
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                // DateFormat editável
-                DateFormat("dd/MM/yyyy - HH:mm EE", 'pt_BR')
-                    .format(todo.dateTime),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              Text(
-                todo.title,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
         startActionPane: ActionPane(
           motion: ScrollMotion(),
           extentRatio: 0.50, // tamanho da caixa
@@ -91,6 +63,34 @@ class ItemListDay extends StatelessWidget {
               },
             ),
           ],
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey[200],
+          ),
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                // DateFormat editável
+                DateFormat("dd/MM/yyyy - HH:mm EE", 'pt_BR')
+                    .format(todo.dateTime),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              Text(
+                todo.title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
